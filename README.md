@@ -1,2 +1,2 @@
 # fusor-playbooks
-Playbooks for fusor executions
+Playbooks for fusor OCP executions
