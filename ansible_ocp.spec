@@ -1,5 +1,5 @@
-Summary: Fusor OCP Playbooks
-Name:    fusor_ocp
+Summary: Ansible OCP Playbooks
+Name:    ansible_ocp
 Version: 1.0.0
 Release: 1%{?dist}
 Group:   Applications/System
@@ -16,7 +16,7 @@ Ansible module for installing and configuring Openshift container platform.
 
 %prep
 %setup -q -n %{name}-%{version}
-rm -rf fusor_ocp.spec rel-eng
+rm -rf ansible_ocp.spec rel-eng
 
 %build
 

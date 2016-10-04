@@ -1,2 +1,2 @@
-# fusor-playbooks
-Playbooks for fusor OCP executions
+# ansible_ocp
+Playbooks for ansible OCP executions
