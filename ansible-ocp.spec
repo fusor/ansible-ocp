@@ -1,10 +1,10 @@
 Summary: Ansible OCP Playbooks
-Name:    ansible_ocp
+Name:    ansible-ocp
 Version: 1.0.0
 Release: 1%{?dist}
 Group:   Applications/System
 License: GPLv3+ and ASL 2.0
-URL: https://github.com/fusor/fusor_ocp
+URL: https://github.com/fusor/ansible-ocp
 Source0:    %{name}-%{version}.tar.gz
 
 BuildArch: noarch
@@ -16,7 +16,7 @@ Ansible module for installing and configuring Openshift container platform.
 
 %prep
 %setup -q -n %{name}-%{version}
-rm -rf ansible_ocp.spec rel-eng
+rm -rf ansible-ocp.spec rel-eng
 
 %build
 
