@@ -15,5 +15,5 @@ deployment:
     - node
   roles: {'master', 'node'}
 variant: openshift-enterprise
-variant_version: '3.2'
+variant_version: '3.3'
 version: v2
