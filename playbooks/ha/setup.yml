@@ -1,0 +1,106 @@
+---
+- name: Setup docker containers
+  hosts: masters, nodes
+  user: ansible_ssh_user
+  tasks:
+    - name: install docker
+      shell: sudo yum install -y {{item}}
+      with_items:
+        - docker
+
+    - name: scp docker storage configuration
+      action: copy src="{{ output_dir }}/docker-storage-setup" dest="/etc/sysconfig/docker-storage-setup" owner=root mode=0775
+
+    - name: scp docker configuration file
+      action: copy src="{{ output_dir }}/docker" dest="/etc/sysconfig/docker" owner=root mode=0775
+
+    - name: check if docker volume already exists
+      stat: path=/dev/{{docker_volume}}
+      register: p
+
+    - name: Setup docker storage
+      command: docker-storage-setup
+      when: p.stat.isdir is not defined
+
+    - name: Start docker services
+      service: name=docker state=started
+
+    - name: Install docker containers
+      action: shell docker pull {{org_label}}-fusor-{{item}}
+      with_items:
+#        - rhscl/php-56-rhel7
+#        - rhscl/mysql-56-rhel7
+#        - rhscl/ruby-22-rhel7
+        - ose-docker-registry
+        - ose-pod
+        - ose-sti-builder
+        - ose-deployer
+        - ose-haproxy-router
+        - ose-docker-builder
+        - ose-keepalived-ipfailover
+
+- name: Configure master node
+  hosts: masters
+  user: ansible_ssh_user
+  tasks:
+    - name: install ansible and necessary packages
+      shell: sudo yum install -y {{item}}
+      with_items:
+        - ansible
+        - deltarpm
+        - wget
+        - git
+        - net-tools
+        - bind-utils
+        - iptables-services
+        - bridge-utils
+        - httpd-tools
+        - gcc
+        - python-virtualenv
+
+    - name: install atomic-openshift-utils
+      shell: sudo yum install -y atomic-openshift-utils
+
+- name: Install packages on HA node
+  hosts: lb_master,lb_infra
+  user: ansible_ssh_user
+  tasks:
+    - name: install haproxy
+      shell: sudo yum install -y {{item}}
+      with_items:
+        - haproxy
+
+- name: Configure HA node for infra
+  hosts: lb_infra
+  user: ansible_ssh_user
+  tasks:
+    - name: update haproxy configuration
+      action: copy src="{{output_dir}}/haproxy_infra.cfg" dest="/etc/haproxy/haproxy.cfg" owner=root mode=0775
+
+    - name: restart haproxy
+      service: name=haproxy state=restarted
+
+- name: Configure HA node for master
+  hosts: lb_master
+  user: ansible_ssh_user
+  tasks:
+    - name: update haproxy configuration
+      action: copy src="{{output_dir}}/haproxy_master.cfg" dest="/etc/haproxy/haproxy.cfg" owner=root mode=0775
+
+    - name: restart haproxy
+      service: name=haproxy state=restarted
+
+- name: Finish configuring HA nodes
+  hosts: lb_master, lb_infra
+  user: ansible_ssh_user
+  tasks:
+    - name: stop firewalld
+      service: name=firewalld state=stopped
+
+    - name: enable logging in rsyslog config
+      shell: sed -i 's|#$ModLoad imudp|$ModLoad imudp|' /etc/rsyslog.conf
+      shell: sed -i 's|#$UDPServerRun 514|$UDPServerRun 514|' /etc/rsyslog.conf
+    - name: create rsyslog file for haproxy
+      shell: echo "local2.*    /var/log/haproxy.log" > /etc/rsyslog.d/haproxy.conf
+    - name: restart rsyslog
+      service: name=rsyslog state=restarted

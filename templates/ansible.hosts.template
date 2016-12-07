@@ -2,6 +2,9 @@
 [OSEv3:children]
 masters
 nodes
+lb_master
+lb_infra
+infra_nodes
 
 # Set variables common for all OSEv3 hosts
 [OSEv3:vars]
@@ -40,3 +43,15 @@ org_label=<org_label>
 # host group for nodes, includes region info
 [nodes]
 <worker_nodes>
+
+[infra_nodes]
+<infra_nodes>
+
+[lb_master]
+<ha_master_nodes>
+
+[lb_infra]
+<ha_infra_nodes>
+
+[primary_master]
+<primary_master>

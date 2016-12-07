@@ -1,0 +1,16 @@
+---
+- name: Prepare and execute atomic-openshift-installer
+  hosts: primary_master
+  user: ansible_ssh_user
+  tasks:
+    - name: scp generated ansible inventory file
+      action: copy src="{{output_dir}}/ansible.hosts" dest="/etc/ansible/hosts" owner=root mode=0775
+
+    - name: scp atomic-openshift-installer.answers.cfg.yml
+      action: copy src="{{output_dir}}/atomic-openshift-installer.answers.cfg.yml" dest="/tmp/atomic-openshift-installer.answers.cfg.yml" owner={{ansible_ssh_user}} mode=0775
+
+    - name: start iptables
+      service: name=iptables state=started
+
+    - name: execute atomic-openshift-installer
+      shell: atomic-openshift-installer -v -u -c /tmp/atomic-openshift-installer.answers.cfg.yml install
