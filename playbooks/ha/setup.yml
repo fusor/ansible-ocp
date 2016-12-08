@@ -1,6 +1,6 @@
 ---
 - name: Setup docker containers
-  hosts: masters, nodes
+  hosts: masters,nodes
   user: ansible_ssh_user
   tasks:
     - name: install docker
@@ -91,7 +91,7 @@
       service: name=haproxy state=restarted
 
 - name: Finish configuring HA nodes
-  hosts: lb_master, lb_infra
+  hosts: lb_master,lb_infra
   user: ansible_ssh_user
   tasks:
     - name: stop firewalld
