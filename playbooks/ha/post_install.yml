@@ -48,7 +48,7 @@
 
     - name: Create default registry
       command: "oadm registry --create=true \
-        --config=/etc/origin/master/admin.kubeconfig
+        --config=/etc/origin/master/admin.kubeconfig \
         --service-account=registry \
         --images='{{satellite_hostname}}:5000/{{org_label}}-fusor-ose-docker-registry' \
         --selector='region=infra'"
