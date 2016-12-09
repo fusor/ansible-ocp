@@ -46,10 +46,13 @@
         --images='{{satellite_hostname}}:5000/{{org_label}}-fusor-ose-haproxy-router' \
         --selector='region=infra'"
 
+    - name: Create registry serviceaccount
+      command: "oc create serviceaccount registry"
+
     - name: Create default registry
       command: "oadm registry --create=true \
         --config=/etc/origin/master/admin.kubeconfig \
-        --service-account=registry \
+        --credentials=/etc/origin/master/openshift-registry.kubeconfig \
         --images='{{satellite_hostname}}:5000/{{org_label}}-fusor-ose-docker-registry' \
         --selector='region=infra'"
 
