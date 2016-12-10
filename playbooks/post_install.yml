@@ -144,7 +144,7 @@
       when: helloworld_sample_app
 
     - name: Create Hello Openshift application
-      command: oc new-app http://www.github.com/dymurray/php-helloworld.git
+      command: oc new-app --insecure-registry=true http://www.github.com/dymurray/php-helloworld.git
       when: helloworld_sample_app
 
     - name: Create Hello Openshift route
