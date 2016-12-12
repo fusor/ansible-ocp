@@ -8,9 +8,10 @@ deployment:
   openshift_docker_insecure_registries: <satellite_hostname>:5000
 
   hosts:
+  <ha_node_entries>
   <node_entries>
   <master_entries>
-  roles: {'master', 'node', 'etcd'}
+  roles: {'master', 'node', 'master_lb', 'etcd'}
 variant: openshift-enterprise
 variant_version: '3.3'
 version: v2
