@@ -2,11 +2,20 @@
 # This playbook configures post-installation steps for OSE
 
 - name: Apply common configuration to all nodes
-  hosts: nodes
+  hosts:
+    - masters
+    - nodes
   user: ansible_ssh_user
   tasks:
     - name: configure iptables to allow for NFS shares
       command: iptables -I OS_FIREWALL_ALLOW -p tcp -m state --state NEW -m tcp --dport 2049 -j ACCEPT
+
+        # Temporary workaround to address https://bugzilla.redhat.com/show_bug.cgi?id=1388016
+    - name: Temporary workaround to add Docker network to insecure registries
+      replace: "dest=/etc/sysconfig/docker regexp='--selinux-enabled' replace='--selinux-enabled --insecure-registry=172.30.0.0/16'"
+
+    - name: Restart Docker service
+      command: systemctl restart docker.service
 
 - name: Configure OSE on master
   hosts: primary_master
