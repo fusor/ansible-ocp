@@ -36,17 +36,17 @@
     
     - name: Enable scheduling for master
       command: oadm manage-node {{item}} --schedulable
-      with_items: groups['masters']
+      with_items: "{{ groups['masters'] }}"
 
     - pause: seconds=5
 
     - name: Label master on the infra region
       command: oc label node {{item}} region=infra --overwrite
-      with_items: groups['infra_nodes']
+      with_items: "{{ groups['infra_nodes'] }}"
 
     - name: Label worker nodes on the primary region
       command: oc label node {{item}} region=primary --overwrite
-      with_items: groups['nodes']
+      with_items: "{{ groups['nodes'] }}"
 
     - name: Create default router
       command: "oadm router --create=true \
