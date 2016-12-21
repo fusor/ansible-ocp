@@ -94,8 +94,16 @@
   hosts: lb_master,lb_infra
   user: ansible_ssh_user
   tasks:
+    - name: check if firewalld is installed
+      command: rpm -q firewalld
+      register: installed
+      changed_when: false
+      failed_when: false
+      ignore_errors: yes
+
     - name: stop firewalld
       service: name=firewalld state=stopped
+      when: '{{ installed.rc == 0 }}'
 
     - name: enable logging in rsyslog config
       shell: sed -i 's|#$ModLoad imudp|$ModLoad imudp|' /etc/rsyslog.conf
