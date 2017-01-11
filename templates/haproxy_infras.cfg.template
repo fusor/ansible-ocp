@@ -64,7 +64,8 @@ defaults
 #---------------------------------------------------------------------
 frontend  main
     #bind *:8443 ssl crt /tmp/master.pem
-    bind *:8443
+    bind *:80
+    bind *:443
     mode tcp
     #option httpclose
     #option forwardfor
