@@ -49,7 +49,8 @@
         --service-account=router \
         --credentials='/etc/origin/master/openshift-router.kubeconfig' \
         --images='{{satellite_hostname}}:5000/{{org_label}}-fusor-ose-haproxy-router' \
-        --selector='region=infra'"
+        --selector='region=infra' \
+        --replicas='2'"
 
     - name: Create registry serviceaccount
       command: "oc create serviceaccount registry"
@@ -59,7 +60,8 @@
         --config=/etc/origin/master/admin.kubeconfig \
         --credentials=/etc/origin/master/openshift-registry.kubeconfig \
         --images='{{satellite_hostname}}:5000/{{org_label}}-fusor-ose-docker-registry' \
-        --selector='region=infra'"
+        --selector='region=infra' \
+        --replicas='2'"
 
     - name: Copy pod example files
       action: copy src="../../files/pod_examples" dest="/home/{{ ose_user }}" owner={{ ose_user }} mode=0775
