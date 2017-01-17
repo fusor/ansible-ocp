@@ -65,12 +65,20 @@ defaults
 frontend  main
     #bind *:8443 ssl crt /tmp/master.pem
     bind *:80
-    bind *:443
     mode tcp
     #option httpclose
     #option forwardfor
     #reqadd X-Forwarded-Proto:\ https
     default_backend             app
+
+frontend  main_ssl
+    #bind *:8443 ssl crt /tmp/master.pem
+    bind *:443
+    mode tcp
+    #option httpclose
+    #option forwardfor
+    #reqadd X-Forwarded-Proto:\ https
+    default_backend             app_ssl
 
 #---------------------------------------------------------------------
 # round robin balancing between the various backends
@@ -81,3 +89,10 @@ backend app
     stick-table type ip size 200k expire 30m
     stick on src
 <infras_mirrors>
+
+backend app_ssl
+    mode  tcp
+    balance     roundrobin
+    stick-table type ip size 200k expire 30m
+    stick on src
+<ssl_infras_mirrors>
