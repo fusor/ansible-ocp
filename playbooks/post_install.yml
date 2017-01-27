@@ -22,12 +22,6 @@
     - name: Create OSE user
       command: htpasswd -cb {{ http_pass_file }} {{ ose_user }} {{ ose_password }}
     
-    - name: Configure httpasswd authentication if not done already
-      replace: "dest=/etc/origin/master/master-config.yaml regexp='DenyAllPasswordIdentityProvider' replace='AllowAllPasswordIdentityProvider'"
-     
-    - name: Restart master service for new authentication
-      command: systemctl restart atomic-openshift-master.service
-    
     - name: Check that we are system:admin user
       command: oc login -u system:admin
     
