@@ -32,7 +32,7 @@
       command: oc login -u system:admin
     
     - name: Enable scheduling for master
-      command: oadm manage-node {{ groups['masters'] }} --schedulable
+      command: oadm manage-node {{ groups['masters'] | join(" ") }} --schedulable
 
     - pause: seconds=5
 
