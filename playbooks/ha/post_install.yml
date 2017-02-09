@@ -47,9 +47,11 @@
         --images='{{satellite_hostname}}:5000/{{org_label}}-fusor-ose-haproxy-router' \
         --selector='region=infra' \
         --replicas='2'"
+      ignore_errors: yes
 
     - name: Create registry serviceaccount
       command: "oc create serviceaccount registry"
+      ignore_errors: yes
 
     - name: Create default registry
       command: "oadm registry --create=true \
@@ -58,6 +60,7 @@
         --images='{{satellite_hostname}}:5000/{{org_label}}-fusor-ose-docker-registry' \
         --selector='region=infra' \
         --replicas='2'"
+      ignore_errors: yes
 
     - name: Copy pod example files
       action: copy src="../../files/pod_examples" dest="/home/{{ ose_user }}" owner={{ ose_user }} mode=0775
@@ -76,6 +79,7 @@
     - name: Create persistent NFS volume for internal registry
       command: oc create -f /home/{{ ose_user }}/pod_examples/registry-volume-nfs.json
       when: storage_type == "NFS"
+      ignore_errors: yes
 
     - name: Replace default GlusterFS path for internal registry
       replace: "dest=/home/{{ ose_user }}/pod_examples/registry-volume-gfs.json regexp='gv0' replace={{ docker_registry_path }}"
@@ -88,17 +92,21 @@
     - name: Create GlusterFS service for internal registry
       command: oc create -f /home/{{ ose_user }}/pod_examples/glusterfs-service.yaml
       when: storage_type == "GFS"
+      ignore_errors: yes
 
     - name: Create GlusterFS endpoints for internal registry
       command: oc create -f /home/{{ ose_user }}/pod_examples/glusterfs-endpoints.yaml
       when: storage_type == "GFS"
+      ignore_errors: yes
 
     - name: Create GlusterFS persistent volume for internal registry
       command: oc create -f /home/{{ ose_user }}/pod_examples/registry-volume-gfs.json
       when: storage_type == "GFS"
+      ignore_errors: yes
 
     - name: Create persistent volume claim for internal registry
       command: oc create -f /home/{{ ose_user }}/pod_examples/registry-pvclaim.json
+      ignore_errors: yes
 
     - name: Create Docker Registry deployment config with persistent storage
       command: oc volume dc docker-registry --add --overwrite -t persistentVolumeClaim --claim-name=registry-pvclaim --name=registry-storage
@@ -147,3 +155,4 @@
     - name: Create Hello Openshift route
       command: oc create -f /home/{{ ose_user }}/pod_examples/hello_openshift_route.json
       when: helloworld_sample_app
+      ignore_errors: yes

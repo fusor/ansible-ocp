@@ -25,6 +25,9 @@ docker_registry_path=<docker_registry_path>
 
 satellite_hostname=<satellite_hostname>
 
+oreg_url=<satellite_hostname>:5000/<org_label>-fusor-ose-${component}
+openshift_examples_modify_imagestreams=true
+
 ose_user=<ose_user>
 ose_password=<ose_password>
 http_pass_file=/etc/origin/openshift-passwd
