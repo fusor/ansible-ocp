@@ -12,5 +12,5 @@ deployment:
   <master_entries>
   roles: {'master', 'node', 'etcd'}
 variant: openshift-enterprise
-variant_version: '3.3'
+variant_version: '3.4'
 version: v2
