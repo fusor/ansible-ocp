@@ -127,7 +127,7 @@
       command: oadm router management-metrics -n default --credentials=/etc/origin/master/openshift-router.kubeconfig --service-account=router --ports='443:5000' --selector='kubernetes.io/hostname={{ inventory_hostname }}' --stats-port=1937 --host-network=false --images='{{satellite_hostname}}:5000/{{org_label}}-fusor-ose-haproxy-router'
 
     - name: Retrieve service token name
-      shell: oc get -n management-infra sa/management-admin --template='{% raw %}{{range .secrets}}{{printf "%s\n" .name}}{{end}}{% endraw %}' | head -n 1 > ~/.key
+      shell: oc get -n management-infra sa/management-admin --template='{% raw %}{{range .secrets}}{{printf "%s\n" .name}}{{end}}{% endraw %}' | grep token | head -n 1 > ~/.key
       become: yes
       become_method: sudo
 

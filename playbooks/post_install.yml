@@ -125,7 +125,7 @@
       ignore_errors: yes
 
     - name: Retrieve service token name
-      shell: oc get -n management-infra sa/management-admin --template='{% raw %}{{range .secrets}}{{printf "%s\n" .name}}{{end}}{% endraw %}' | head -n 1 > ~/.key
+      shell: oc get -n management-infra sa/management-admin --template='{% raw %}{{range .secrets}}{{printf "%s\n" .name}}{{end}}{% endraw %}' | grep token | head -n 1 > ~/.key
       become: yes
       become_method: sudo
 
