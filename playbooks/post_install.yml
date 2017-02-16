@@ -137,7 +137,7 @@
       shell: oc get -n management-infra secrets {{ key.stdout }} --template='{% raw %}{{.data.token}}{% endraw %}' | base64 -d > ~/.token
 
     - name: Save token to known deployment location
-      fetch: src=~/.token dest={{ output_dir }}/{{ inventory_hostname }}.token flat=yes
+      fetch: src=~/.token dest={{ output_dir }}/ocp_master.token flat=yes
 
     - name: Login as specified OSE user
       command: oc login -u {{ ose_user }} -p {{ ose_password }}
