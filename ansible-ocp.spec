@@ -1,6 +1,6 @@
 Summary: Ansible OCP Playbooks
 Name:    ansible-ocp
-Version: 1.0.0
+Version: 1.1.0
 Release: 1%{?dist}
 Group:   Applications/System
 License: GPLv3+ and ASL 2.0
